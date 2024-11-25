@@ -19,7 +19,7 @@ int main(){
         }
     }
 
-    for(i=0;i<=taille;i++)printf("%d ",tabl[i]);
+    for(i=0;i<=taille;i++)printf("%dtessting ",tabl[i]);
 
     return 0;
 
