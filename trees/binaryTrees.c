@@ -55,6 +55,14 @@ int succesor(struct node *root){
     return (root->data);
 
 }
+int biggest(struct node *root){
+    root=root->right;
+    struct node *current = root;
+    while(current->right != NULL){
+        current = current->right;
+    }
+    return current->data;
+}
 int predecesseur(struct node *root){
     root=root->left;
     while(root->right!=NULL){
@@ -84,6 +92,25 @@ struct node *removeVar(struct node *root, int var){
     return root;
 
 }
+
+void removeBiggest(struct node *root){
+    struct node *parent = NULL;
+    struct node *current = root;
+    while((current->right != NULL)){
+        parent = current;
+        current = current->right;
+    }
+    if(current->left != NULL) parent->right = current->left;
+    else parent -> right = NULL;
+
+    free(current);
+}
+int nbfeuilles(struct node *root){
+
+    if(root == NULL) return 0; //nothing
+    else if(root->right == NULL && root->left==NULL) return 1; //this is the feuille
+    return nbfeuilles(root->right) + nbfeuilles(root->left);   
+}
 int main(void){
 
     struct node *root=NULL;
@@ -97,14 +124,10 @@ int main(void){
     insert(root,1);
     insert(root,3);
     aficherTree(root); 
-    if(searchTree(root,3)==1) printf("Exists bien.\n");
-    else printf("it does not exists\n");
-    printf("-----After removing 3--------\n");
-    removeVar(root,10);
-    removeVar(root,12);
+    printf("This is the great number in the tree: %d\n",biggest(root));
+    removeBiggest(root);
     aficherTree(root);
-    if(searchTree(root,3)==1) printf("Exists bien.\n");
-    else printf("it does not exists\n");
+    printf("The total of feullies %d\n",nbfeuilles(root));
     return 0;
     
 }
