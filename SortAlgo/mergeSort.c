@@ -16,6 +16,9 @@ void merge(int left[],int c,int right[],int j, int tab[]){
             i++;
         }
     }
+    
+    //those two loops for the rest values in right or left
+
     while(l<c){
         tab[i]=left[l];
         l++;
@@ -26,7 +29,6 @@ void merge(int left[],int c,int right[],int j, int tab[]){
         r++;
         i++;
     }    
-    //those two loops for the rest values in right or left
 
 }
 
@@ -37,7 +39,7 @@ void mergeSort(int tab[],int n){
 
     int j=0;
     int c=0; //counter for left array
-    
+    // splitting
     for(int i=0;i<n;i++){
         if(i<middle){ 
             leftAr[i]=tab[i];

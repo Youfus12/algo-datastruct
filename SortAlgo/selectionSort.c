@@ -8,7 +8,6 @@ void selectionSort(int tab[],int n){
     for(i=0;i<n;i++){
         min=i;
         for(j=i+1;j<n;j++){
-
             if(tab[min]>tab[j]){
                 min=j;
             }

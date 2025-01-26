@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+/*
+    Timecoplexity for those algorithms of trees: O(n)
+*/
 typedef struct node{
     int data;
     struct node *right;
@@ -19,21 +21,103 @@ struct node *createNode(int var){
     return nouv;
 }
 
-struct node *insert(struct node *root,int var){
+struct node *insert_binary(struct node *root,int var){
 
     if(root==NULL) return createNode(var);
-    if(var<(root->data))  root->left= insert(root->left,var); //the root(left r right) will have inside of it another roots thats why we insert in it
-    else     root->right = insert(root->right,var); 
+    if(var<(root->data))  root->left= insert_binary(root->left,var); //the root(left r right) will have inside of it another roots thats why we insert in it
+    else     root->right = insert_binary(root->right,var); 
 
     return root;
 
 }
+void print_depth_first(node* root){
+    
+    node* stack[100];
+    int stack_num = 0;
+    stack[0] = root;
+    stack_num++;
 
-void aficherTree(struct node *root){
-    if(root!=NULL ){
-        aficherTree(root->left); //print all the value that are on the left
-        printf("%d\n",(root->data));      //then go to the main node and print its value
-        aficherTree(root->right);//then go to the right side 
+    while(stack_num > 0){
+        node* current = stack[stack_num-1]; // last node in the stack array
+        stack_num--;
+        printf("%d\n",(current->data));
+        
+        if(current->right != NULL){
+            stack[stack_num] = current->right;
+            stack_num++;
+        }
+
+        if(current->left != NULL){
+            stack[stack_num] = current->left;
+            stack_num++;
+        }
+    }
+
+}
+
+void dfs_recursive(node* node){
+    printf("%d\n",node->data);
+    if(node->left != NULL)  dfs_recursive(node->left);
+    if(node->right != NULL )  dfs_recursive(node->right);
+}
+void print_breadth_first(node* root){
+    node* queue[100];
+    int queue_num = 0;
+    queue[0] = root;
+    queue_num++;
+
+    while(queue_num > 0){
+        node* current = queue[0];
+
+        printf("%d\n",current->data);
+
+        for(int i = 0; i < queue_num-1; i++){
+            queue[i] = queue[i+1]; 
+        }
+        queue_num--;
+        // izquierda a derecha : first in first out
+
+        if(current -> left  != NULL ){
+            queue[queue_num] = current->left;
+            queue_num++;
+        } 
+        if(current->right != NULL){
+            queue[queue_num] = current->right;
+            queue_num++;
+        }
+    }
+}
+
+
+void in_order(node* root){
+        // left -> root -> right
+        // used in a contextof binary search tree in order
+        if(root!=NULL ){
+            in_order(root->left); //print all the value that are on the left
+            printf("%d\n",(root->data));      //then go to the main node and print its value
+            in_order(root->right);//then go to the right side 
+    }
+
+}
+void post_fixe(node* root){
+    // left -> right ->root
+    // used in context to delete a tree from leaf to root
+    if(root != NULL){
+        post_fixe(root->left);
+        post_fixe(root->right);
+        printf("%d\n",root->data);
+    }
+}
+
+void pre_order(node* root){
+    // root -> left -> right
+    // preoder is used to create a copy of a tree
+
+        if(root != NULL){
+            printf("%d\n",root->data);
+            post_fixe(root->left);
+            post_fixe(root->right);
+            
     }
 }
 
@@ -62,13 +146,24 @@ int biggest(struct node *root){
         current = current->right;
     }
     return current->data;
+
 }
+
 int predecesseur(struct node *root){
     root=root->left;
     while(root->right!=NULL){
         root=root->right;
     }
     return root->data;
+}
+
+void destroy(node *root){
+    if(root == NULL) return;
+
+    destroy(root->left);
+    destroy(root->right);
+    free(root);
+    
 }
 struct node *removeVar(struct node *root, int var){
 
@@ -111,23 +206,43 @@ int nbfeuilles(struct node *root){
     else if(root->right == NULL && root->left==NULL) return 1; //this is the feuille
     return nbfeuilles(root->right) + nbfeuilles(root->left);   
 }
+
+
 int main(void){
 
     struct node *root=NULL;
-    
-    root=insert(root,10);
-    insert(root,12); //will work with root= or without it: why? i dont know hhhhh antik
-    insert(root,51);
-    insert(root,82);
-    insert(root,2);
-    insert(root,5);
-    insert(root,1);
-    insert(root,3);
-    aficherTree(root); 
+    /*
+            10
+
+        6        12    
+
+    5      8  11     15
+
+    */
+    root=insert_binary(root,10);
+    insert_binary(root, 12);
+    insert_binary(root, 11);
+    insert_binary(root, 15);
+    insert_binary(root, 6);
+    insert_binary(root, 5);
+    insert_binary(root,8);
+   /* 
+    in_order(root); 
     printf("This is the great number in the tree: %d\n",biggest(root));
-    removeBiggest(root);
-    aficherTree(root);
-    printf("The total of feullies %d\n",nbfeuilles(root));
+    printf("The total of feullies %d\n\n",nbfeuilles(root));
+
+    printf("Printing with the depht first algorithm : \n");
+    print_depth_first(root);
+
+    
+    printf("Printing with the breadth first algorithm : \n");
+    print_breadth_first(root);
+*/
+
+    print_depth_first(root);
+    printf("\n\n\n");
+    
+    if(checkBST(root)==1) printf("\nYounes is sigma boy");
     return 0;
     
 }

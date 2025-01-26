@@ -3,7 +3,6 @@
 
 void insertionSort(int tab[],int n){
     int i,j,temp;
-
     for(i=1;i<n;i++){
         j=i-1;
         temp=tab[i];
